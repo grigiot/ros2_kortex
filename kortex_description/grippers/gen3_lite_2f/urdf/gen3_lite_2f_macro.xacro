@@ -10,7 +10,8 @@
     sim_isaac:=false
     isaac_joint_commands:=/isaac_joint_commands
     isaac_joint_states:=/isaac_joint_states
-    use_internal_bus_gripper_comm:=true">
+    use_internal_bus_gripper_comm:=true
+    com_port" >
 
     <xacro:include filename="$(find kortex_description)/grippers/gen3_lite_2f/urdf/gen3_lite_2f.ros2_control.xacro" />
     <xacro:gripper_ros2_control
