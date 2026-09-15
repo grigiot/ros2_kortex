@@ -31,6 +31,8 @@
   <xacro:arg name="camera_width" default="640"/>
   <xacro:arg name="camera_height" default="480"/>
   <xacro:arg name="camera_fps" default="6"/>
+  <xacro:arg name="origin_xyz" default="0 0 0"/>
+  <xacro:arg name="origin_rpy" default="0 0 0"/>
   <xacro:arg name="simulation_controllers" default="$(find kortex_description)/arm/$(arg arm)/$(arg dof)dof/config/ros2_controllers.yaml" />
 
 
@@ -70,24 +72,25 @@
     sim_ignition="$(arg sim_ignition)"
     sim_isaac="$(arg sim_isaac)"
     initial_positions="${xacro.load_yaml(initial_positions_file)}" >
-    <origin xyz="0 0 0" rpy="0 0 0" />  <!-- position robot in the world -->
+    <origin xyz="$(arg origin_xyz)" rpy="$(arg origin_rpy)" />  <!-- position robot in the world -->
   </xacro:load_robot>
   
   <xacro:if value="$(arg sim_unity)">
-    <joint name="camera_joint" type="fixed">
-      <parent link="world" />
-      <child link="camera_frame" />
+    <joint name="$(arg prefix)camera_joint" type="fixed">
+      <origin xyz="0 1 0" rpy="0 0 0"/>
+      <parent link="$(arg prefix)base_link" />
+      <child link="$(arg prefix)camera_frame" />
     </joint>
-    <link name="camera_frame">
+    <link name="$(arg prefix)camera_frame">
       <visual>
-        <origin xyz="0 1 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <box size="0.01 0.01 0.01"/>
         </geometry>
       </visual>
     </link>
     <sensor name="camera_name" update_rate="20">
-      <parent link="camera_frame"/>
+      <parent link="$(arg prefix)camera_frame"/>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <camera>
         <image width="640" height="480" hfov="1.5708" format="RGB8" near="0.01" far="50.0"/>
