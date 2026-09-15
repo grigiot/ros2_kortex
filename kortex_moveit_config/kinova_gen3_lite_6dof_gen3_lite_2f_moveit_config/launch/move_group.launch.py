@@ -9,13 +9,22 @@ from moveit_configs_utils.launch_utils import DeclareBooleanLaunchArg, add_debug
 from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
+
+    ld = LaunchDescription()
+
+    ld.add_action(DeclareLaunchArgument("prefix", default_value=""))
+    ld.add_action(DeclareLaunchArgument("origin_xyz", default_value="0 0 0"))
+    ld.add_action(DeclareLaunchArgument("origin_rpy", default_value="0 0 0"))
+
     xacro_args = {
         "robot_ip": "xxx.yyy.zzz.www",
         "name": "gen3_lite",
         "arm": "gen3_lite",
         "dof": "6",
         "vision": "False",
-        "prefix": "",
+        "prefix": LaunchConfiguration("prefix"),
+        "origin_xyz": LaunchConfiguration("origin_xyz"),
+        "origin_rpy": LaunchConfiguration("origin_rpy"),
         "sim_gazebo": "False",
         "sim_ignition": "True",
         "simulation_controllers": "/workspaces/vscode_moveit_humble/src/ros2_kortex/kortex_description/arms/gen3_lite/6dof/config/ros2_controllers.yaml",
@@ -27,7 +36,6 @@ def generate_launch_description():
         .to_moveit_configs()
     )
     
-    ld = LaunchDescription()
 
     ld.add_action(DeclareBooleanLaunchArg("debug", default_value=False))
     ld.add_action(DeclareBooleanLaunchArg("use_sim_time", default_value=False))
@@ -45,6 +53,7 @@ def generate_launch_description():
     # do not copy dynamics information from /joint_states to internal robot monitoring
     # default to false, because almost nothing in move_group relies on this information
     ld.add_action(DeclareBooleanLaunchArg("monitor_dynamics", default_value=False))
+
 
     should_publish = LaunchConfiguration("publish_monitored_planning_scene")
 
