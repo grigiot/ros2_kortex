@@ -77,7 +77,7 @@
   
   <xacro:if value="$(arg sim_unity)">
     <joint name="$(arg prefix)camera_joint" type="fixed">
-      <origin xyz="0 1 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <parent link="$(arg prefix)base_link" />
       <child link="$(arg prefix)camera_frame" />
     </joint>
