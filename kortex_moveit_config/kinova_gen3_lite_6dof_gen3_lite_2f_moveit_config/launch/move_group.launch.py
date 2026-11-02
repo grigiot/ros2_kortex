@@ -19,6 +19,8 @@ def launch_setup(context):
     joint_limits_path = joint_limits_path if joint_limits_path != "" else None
     trajectory_execution_path = LaunchConfiguration("trajectory_execution_path").perform(context)
     trajectory_execution_path = trajectory_execution_path if trajectory_execution_path != "" else None
+    sensors_kinect_pointcloud_path = LaunchConfiguration("sensors_kinect_pointcloud_path").perform(context)
+    sensors_kinect_pointcloud_path = sensors_kinect_pointcloud_path if sensors_kinect_pointcloud_path != "" else None
 
     xacro_args = {
         "robot_ip": "xxx.yyy.zzz.www",
@@ -44,6 +46,7 @@ def launch_setup(context):
         .robot_description_semantic(file_path=robot_description_semantic_path)
         .robot_description_kinematics(file_path=robot_description_kinematics_path)
         .joint_limits(file_path=joint_limits_path)
+        .sensors_3d(file_path=sensors_kinect_pointcloud_path)
         # .trajectory_execution(file_path=trajectory_execution_path)
         .to_moveit_configs()
     )
@@ -105,7 +108,7 @@ def generate_launch_description():
     ld.add_action(DeclareLaunchArgument("joint_limits_path", default_value=""))
     ld.add_action(DeclareLaunchArgument("trajectory_execution_path", default_value=""))
     ld.add_action(DeclareBooleanLaunchArg("debug", default_value=False))
-    ld.add_action(DeclareBooleanLaunchArg("use_sim_time", default_value=False))
+    ld.add_action(DeclareBooleanLaunchArg("use_sim_time", default_value=True))
     ld.add_action(
         DeclareBooleanLaunchArg("allow_trajectory_execution", default_value=False)
     )
